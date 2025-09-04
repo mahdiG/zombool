@@ -1,14 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://gow0dapv2vfr"]
+[gd_scene load_steps=17 format=3 uid="uid://gow0dapv2vfr"]
 
 [ext_resource type="Script" uid="uid://bdpjjkc12bw" path="res://player.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://zombie.tscn" id="2_feb5d"]
+[ext_resource type="Shader" uid="uid://d875rcahxm8m" path="res://ground.tres" id="4_fc0e3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mwb40"]
-sky_top_color = Color(0.126702, 0.0165431, 0.0947993, 1)
-sky_horizon_color = Color(0.298439, 7.21961e-08, 0.151486, 1)
-ground_bottom_color = Color(0.180234, 0.0308164, 0.138942, 1)
-ground_horizon_color = Color(0.298519, 0, 0.151061, 1)
+sky_top_color = Color(0.20871, 0.20871, 0.20871, 1)
+sky_horizon_color = Color(0.144063, 0.144063, 0.144063, 1)
+ground_bottom_color = Color(0.145098, 0.145098, 0.145098, 1)
+ground_horizon_color = Color(0.12944, 0.133613, 0.1402, 1)
 
 [sub_resource type="Sky" id="Sky_80nbo"]
 sky_material = SubResource("ProceduralSkyMaterial_mwb40")
@@ -32,18 +33,26 @@ _data = {
 point_count = 4
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_feb5d"]
-vertices = PackedVector3Array(-49.5, 3, -49.5, -49.5, 3, 49.5, 49.5, 3, 49.5, 49.5, 3, -49.5)
+vertices = PackedVector3Array(-49.5, 1.5, -49.5, -49.5, 1.5, 49.5, 49.5, 1.5, 49.5, 49.5, 1.5, -49.5)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_feb5d"]
-size = Vector3(100, 5, 100)
+size = Vector3(100, 0, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feb5d"]
-albedo_color = Color(0.229874, 0.0931971, 0, 1)
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fc0e3"]
+frequency = 0.0656
 
-[sub_resource type="BoxMesh" id="BoxMesh_fc0e3"]
-material = SubResource("StandardMaterial3D_feb5d")
-size = Vector3(100, 5, 100)
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7jktm"]
+noise = SubResource("FastNoiseLite_fc0e3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jktm"]
+render_priority = 0
+shader = ExtResource("4_fc0e3")
+shader_parameter/NoiseTexture = SubResource("NoiseTexture2D_7jktm")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_feb5d"]
+material = SubResource("ShaderMaterial_7jktm")
+size = Vector2(100, 100)
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_e2o6t")
@@ -53,7 +62,8 @@ zombie_scene = ExtResource("2_feb5d")
 environment = SubResource("Environment_e2o6t")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, -0.00561104, 0.508385, 0.861111, -0.499969, 0.744342, -0.442704, 0, 23.4664, 0)
+transform = Transform3D(-0.197963, -0.976997, 0.079291, -0.221826, 0.123447, 0.967241, -0.954779, 0.173889, -0.241161, 0, 9.4664, 0)
+light_color = Color(0.359069, 0.359069, 0.359069, 1)
 shadow_enabled = true
 
 [node name="Player" type="CharacterBody3D" parent="."]
@@ -85,16 +95,16 @@ wait_time = 1.421
 autostart = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 navigation_mesh = SubResource("NavigationMesh_feb5d")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D"]
+[node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
 shape = SubResource("BoxShape3D_feb5d")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D"]
-mesh = SubResource("BoxMesh_fc0e3")
+[node name="GroundMesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+mesh = SubResource("PlaneMesh_feb5d")
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
