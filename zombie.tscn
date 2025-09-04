@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cd235ygqed5qe"]
+
+[ext_resource type="Script" uid="uid://cjkxdawohg70q" path="res://zombie.gd" id="1_uiaus"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_050lg"]
+albedo_color = Color(0, 0.302111, 0.211775, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uiaus"]
+material = SubResource("StandardMaterial3D_050lg")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_roy8y"]
+
+[node name="Zombie" type="CharacterBody3D"]
+script = ExtResource("1_uiaus")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_uiaus")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_roy8y")
