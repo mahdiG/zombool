@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://zombie.tscn" id="2_feb5d"]
 [ext_resource type="Shader" uid="uid://d875rcahxm8m" path="res://ground.tres" id="4_fc0e3"]
+[ext_resource type="AudioStream" uid="uid://b70vlo4hqaf1g" path="res://audio/dreadfulwhispers.mp3" id="4_fc0e3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mwb40"]
 sky_top_color = Color(0.20871, 0.20871, 0.20871, 1)
@@ -99,6 +100,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 navigation_mesh = SubResource("NavigationMesh_feb5d")
 
 [node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_fc0e3")
+autoplay = true
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
