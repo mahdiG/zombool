@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://gow0dapv2vfr"]
+[gd_scene load_steps=15 format=3 uid="uid://gow0dapv2vfr"]
 
 [ext_resource type="Script" uid="uid://bdpjjkc12bw" path="res://player.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://zombie.tscn" id="2_feb5d"]
+[ext_resource type="AudioStream" uid="uid://b70vlo4hqaf1g" path="res://audio/dreadfulwhispers.mp3" id="4_fc0e3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mwb40"]
 sky_top_color = Color(0.126702, 0.0165431, 0.0947993, 1)
@@ -85,7 +86,7 @@ shape = SubResource("BoxShape3D_80nbo")
 curve = SubResource("Curve3D_feb5d")
 
 [node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath"]
-transform = Transform3D(-0.00985167, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.00985167, -44.7783, 0, -43.5089)
+transform = Transform3D(-0.00985203, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.00985203, -44.7783, 0, -43.5089)
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 1.421
@@ -93,5 +94,9 @@ autostart = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_feb5d")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_fc0e3")
+autoplay = true
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
