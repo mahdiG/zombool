@@ -4,6 +4,7 @@ extends Node3D
 @onready var spawn_timer: Timer = $SpawnTimer
 @onready var spawn_location: PathFollow3D = $SpawnPath/SpawnLocation
 @onready var player: CharacterBody3D = $Player
+@onready var fps_label: Label = $DebugStats/DebugContainer/FpsLabel
 
 @export var max_zombies := 10
 var zombies_spawned := 0
@@ -14,8 +15,8 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _process(_delta: float) -> void:
+	fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
 
 func spawn_zombie() -> void:
 	var zombie := zombie_scene.instantiate()
@@ -32,7 +33,7 @@ func _on_spawn_timer_timeout() -> void:
 		spawn_timer.stop()
 		return
 		
-	print("timer timedout")
-	spawn_zombie()
-	zombies_spawned += 1
+	#print("timer timedout")
+	#spawn_zombie()
+	#zombies_spawned += 1
 	

@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://b0astfvi35wnx"]
+
+[ext_resource type="Script" uid="uid://biq0yvd6d0bo6" path="res://projectile.gd" id="1_a85iw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a85iw"]
+albedo_color = Color(0.98333335, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_a85iw"]
+radius = 0.01
+height = 0.02
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qxf0c"]
+radius = 0.01
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qxf0c"]
+lifetime_randomness = 0.11
+radial_velocity_min = 4.9999776
+radial_velocity_max = 14.999977
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dgwo2"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.98333335, 0, 1)
+emission_energy_multiplier = 2.29
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxmqc"]
+material = SubResource("StandardMaterial3D_dgwo2")
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Projectile" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 2
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_a85iw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_a85iw")
+mesh = SubResource("SphereMesh_a85iw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_qxf0c")
+
+[node name="ExplosionVFX" type="GPUParticles3D" parent="."]
+cast_shadow = 0
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_qxf0c")
+draw_pass_1 = SubResource("BoxMesh_sxmqc")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

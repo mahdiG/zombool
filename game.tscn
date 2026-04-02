@@ -3,23 +3,22 @@
 [ext_resource type="Script" uid="uid://bdpjjkc12bw" path="res://player.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://zombie.tscn" id="2_feb5d"]
-[ext_resource type="Shader" uid="uid://d875rcahxm8m" path="res://ground.tres" id="4_fc0e3"]
+[ext_resource type="Texture2D" uid="uid://11sve3gj0w8b" path="res://icon.svg" id="4_7jktm"]
 [ext_resource type="AudioStream" uid="uid://b70vlo4hqaf1g" path="res://audio/dreadfulwhispers.mp3" id="4_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://b0astfvi35wnx" path="res://projectile.tscn" id="4_ryrav"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mwb40"]
-sky_top_color = Color(0.20871, 0.20871, 0.20871, 1)
-sky_horizon_color = Color(0.144063, 0.144063, 0.144063, 1)
-ground_bottom_color = Color(0.145098, 0.145098, 0.145098, 1)
-ground_horizon_color = Color(0.12944, 0.133613, 0.1402, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fc0e3"]
 
-[sub_resource type="Sky" id="Sky_80nbo"]
-sky_material = SubResource("ProceduralSkyMaterial_mwb40")
+[sub_resource type="Sky" id="Sky_7jktm"]
+sky_material = SubResource("ProceduralSkyMaterial_fc0e3")
 
-[sub_resource type="Environment" id="Environment_e2o6t"]
+[sub_resource type="Environment" id="Environment_ryrav"]
 background_mode = 2
-sky = SubResource("Sky_80nbo")
-tonemap_mode = 2
-glow_enabled = true
+sky = SubResource("Sky_7jktm")
+fog_mode = 1
+fog_light_color = Color(0.6553458, 0, 0.113010876, 1)
+fog_density = 1.0
+fog_sky_affect = 0.142
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_e2o6t"]
 
@@ -40,19 +39,12 @@ polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 [sub_resource type="BoxShape3D" id="BoxShape3D_feb5d"]
 size = Vector3(100, 0, 100)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_fc0e3"]
-frequency = 0.0656
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7jktm"]
-noise = SubResource("FastNoiseLite_fc0e3")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jktm"]
-render_priority = 0
-shader = ExtResource("4_fc0e3")
-shader_parameter/NoiseTexture = SubResource("NoiseTexture2D_7jktm")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryrav"]
+albedo_texture = ExtResource("4_7jktm")
+uv1_scale = Vector3(20, 20, 20)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_feb5d"]
-material = SubResource("ShaderMaterial_7jktm")
+material = SubResource("StandardMaterial3D_ryrav")
 size = Vector2(100, 100)
 
 [node name="Game" type="Node3D"]
@@ -60,16 +52,16 @@ script = ExtResource("1_e2o6t")
 zombie_scene = ExtResource("2_feb5d")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_e2o6t")
+environment = SubResource("Environment_ryrav")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.197963, -0.976997, 0.079291, -0.221826, 0.123447, 0.967241, -0.954779, 0.173889, -0.241161, 0, 9.4664, 0)
-light_color = Color(0.359069, 0.359069, 0.359069, 1)
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.7071067, 0, -0.7071067, 0.70710677, 0, 12, 0)
 shadow_enabled = true
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("1_80nbo")
+projectile = ExtResource("4_ryrav")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -79,17 +71,58 @@ mesh = SubResource("CapsuleMesh_e2o6t")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_feb5d")
 
-[node name="CameraPivot" type="Node3D" parent="Player"]
+[node name="CameraPivotVertical" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 0.999988, 0.00486945, 0, -0.00486945, 0.999988, 0, 1.46296, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 1.39698e-09, 0, -1.39698e-09, 1, 0.693685, 0.0785604, 1.56071)
+[node name="Camera" type="Camera3D" parent="Player/CameraPivotVertical"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 1.3969839e-09, 0, -1.3969839e-09, 1.0000001, 0, 0, 0)
+
+[node name="ProjectileSpawnPoint" type="Marker3D" parent="Player/CameraPivotVertical/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0030798912, -0.632466)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4000001, -1)
+visible = false
+light_color = Color(0.73, 0.47243163, 0.1971, 1)
+light_energy = 5.57
+light_indirect_energy = 16.0
+omni_attenuation = 1.35
+
+[node name="Player2" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -10)
+script = ExtResource("1_80nbo")
+projectile = ExtResource("4_ryrav")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_e2o6t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_feb5d")
+
+[node name="CameraPivotVertical" type="Node3D" parent="Player2"]
+transform = Transform3D(1, 0, 0, 0, 0.999988, 0.00486945, 0, -0.00486945, 0.999988, 0, 1.46296, 0)
+
+[node name="Camera" type="Camera3D" parent="Player2/CameraPivotVertical"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 1.3969839e-09, 0, -1.3969839e-09, 1.0000001, 0, 0, 0)
+
+[node name="ProjectileSpawnPoint" type="Marker3D" parent="Player2/CameraPivotVertical/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0030798912, -0.632466)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Player2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4000001, -1)
+visible = false
+light_color = Color(0.73, 0.47243163, 0.1971, 1)
+light_energy = 5.57
+light_indirect_energy = 16.0
+omni_attenuation = 1.35
 
 [node name="SpawnPath" type="Path3D" parent="."]
 curve = SubResource("Curve3D_feb5d")
 
 [node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath"]
-transform = Transform3D(-0.00985203, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.00985203, -44.7783, 0, -43.5089)
+transform = Transform3D(-0.009852031, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.009852031, -44.7783, 0, -43.5089)
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 1.421
@@ -100,16 +133,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 navigation_mesh = SubResource("NavigationMesh_feb5d")
 
 [node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
-[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_fc0e3")
-autoplay = true
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
 shape = SubResource("BoxShape3D_feb5d")
 
 [node name="GroundMesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
 mesh = SubResource("PlaneMesh_feb5d")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_fc0e3")
+volume_db = -80.0
+autoplay = true
+
+[node name="DebugStats" type="Control" parent="."]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.05925926
+grow_horizontal = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="DebugContainer" type="HBoxContainer" parent="DebugStats"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -54.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="FpsLabel" type="Label" parent="DebugStats/DebugContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+text = "FPS: 00"
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
