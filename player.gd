@@ -63,5 +63,4 @@ func shoot() -> void:
 	
 	var direction := camera_pivot_vertical.global_position.direction_to(projectile_spawn_point.global_position)
 	owner.add_child(bullet)
-	#bullet.apply_central_impulse(direction * (30 + velocity.length()))
-	bullet.apply_central_force(direction * (5000 + velocity.length()))
+	bullet.apply_central_impulse(direction * (30 + velocity.length()))

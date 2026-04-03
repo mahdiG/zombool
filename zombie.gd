@@ -4,6 +4,7 @@ extends CharacterBody3D
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent
 
+var health := 100
 var target_hero: CharacterBody3D
 
 func _ready() -> void:
@@ -40,3 +41,12 @@ func _on_navigation_agent_velocity_computed(safe_velocity: Vector3) -> void:
 func _on_navigation_agent_target_reached() -> void:
 	print("reached target")
 #	TODO: attack the character
+
+func take_damage(amount: int) -> void:
+	health = health - amount
+	if health <= 0:
+		die()
+
+func die() -> void:
+	print("zombie died")
+	queue_free()

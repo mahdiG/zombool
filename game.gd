@@ -34,6 +34,6 @@ func _on_spawn_timer_timeout() -> void:
 		return
 		
 	#print("timer timedout")
-	#spawn_zombie()
-	#zombies_spawned += 1
+	spawn_zombie()
+	zombies_spawned += 1
 	

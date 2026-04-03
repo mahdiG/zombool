@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://blwv8o35ng6m3"]
+
+[ext_resource type="Script" uid="uid://bdpjjkc12bw" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="PackedScene" uid="uid://b0astfvi35wnx" path="res://projectile.tscn" id="2_i3pqv"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_e2o6t"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_feb5d"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_onrkg")
+projectile = ExtResource("2_i3pqv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_e2o6t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_feb5d")
+
+[node name="CameraPivotVertical" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999988, 0.00486945, 0, -0.00486945, 0.999988, 0, 1.46296, 0)
+
+[node name="Camera" type="Camera3D" parent="CameraPivotVertical"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 1.3969839e-09, 0, -1.3969839e-09, 1.0000001, 0, 0, 0)
+
+[node name="ProjectileSpawnPoint" type="Marker3D" parent="CameraPivotVertical/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0030798912, -0.632466)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4000001, -1)
+visible = false
+light_color = Color(0.73, 0.47243163, 0.1971, 1)
+light_energy = 5.57
+light_indirect_energy = 16.0
+omni_attenuation = 1.35

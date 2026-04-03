@@ -11,6 +11,8 @@ material = SubResource("StandardMaterial3D_050lg")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_roy8y"]
 
 [node name="Zombie" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 7
 script = ExtResource("1_uiaus")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
