@@ -1,5 +1,9 @@
 extends CharacterBody3D
 
+signal took_damage(old_health, new_health)
+signal player_died(old_health, new_health)
+
+
 # constants
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -7,6 +11,7 @@ var mouse_sens := 0.5
 
 # exports (similar to lit properties)
 @export var projectile : PackedScene
+@export var health := 100
 
 # onready
 @onready var camera_pivot_vertical: Node3D = $CameraPivotVertical
@@ -64,3 +69,13 @@ func shoot() -> void:
 	var direction := camera_pivot_vertical.global_position.direction_to(projectile_spawn_point.global_position)
 	owner.add_child(bullet)
 	bullet.apply_central_impulse(direction * (30 + velocity.length()))
+	
+func take_damage(amount) -> void:
+	var old_health := health
+	health -= amount
+	took_damage.emit(old_health, health)
+	if health <= 0:
+		die()
+		
+func die() -> void:
+	print("player died!")

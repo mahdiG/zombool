@@ -91,6 +91,7 @@ grow_horizontal = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="DebugContainer" type="HBoxContainer" parent="DebugStats"]
+custom_minimum_size = Vector2(1.4, 0)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -109,4 +110,11 @@ size_flags_horizontal = 8
 size_flags_vertical = 1
 text = "FPS: 00"
 
+[node name="HealthLabel" type="Label" parent="DebugStats/DebugContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+text = "Health: 100"
+
+[connection signal="took_damage" from="Player" to="." method="_on_player_took_damage"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
