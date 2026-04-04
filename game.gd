@@ -51,7 +51,6 @@ func _on_enemy_spawn_timer_timeout() -> void:
 		enemy_spawn_timer.stop()
 		return
 		
-	#print("timer timedout")
 	spawn_zombie()
 	zombies_spawned += 1
 
