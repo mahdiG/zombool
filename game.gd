@@ -3,11 +3,13 @@ extends Node3D
 @export var zombie_scene: PackedScene
 @export var max_zombies := 10
 
-@onready var spawn_timer: Timer = $SpawnTimer
+@onready var enemy_spawn_timer: Timer = $EnemySpawnTimer
 @onready var spawn_location: PathFollow3D = $SpawnPath/SpawnLocation
 @onready var player: CharacterBody3D = $Player
 @onready var fps_label: Label = $DebugStats/DebugContainer/FpsLabel
 @onready var health_label: Label = $DebugStats/DebugContainer/HealthLabel
+@onready var big_center_label: Label = $CenterContainer/BigCenterLabel
+@onready var big_center_label_timer: Timer = $BigCenterLabelTimer
 
 var zombies_spawned := 0
 var zombies_dead := 0
@@ -15,12 +17,21 @@ var current_round := 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	player.died.connect(_on_player_died)
+	start_round()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
+	
+func start_round() -> void:
+	big_center_label.text = "Round %d" % current_round
+	big_center_label.visible = true
+	big_center_label_timer.start()
+	zombies_spawned = 0
+	zombies_dead = 0
+	max_zombies += 10
+	enemy_spawn_timer.start()
 
 func spawn_zombie() -> void:
 	var zombie := zombie_scene.instantiate()
@@ -33,10 +44,11 @@ func spawn_zombie() -> void:
 	
 	add_child(zombie)
 	
+	
 
-func _on_spawn_timer_timeout() -> void:
+func _on_enemy_spawn_timer_timeout() -> void:
 	if zombies_spawned >= max_zombies:
-		spawn_timer.stop()
+		enemy_spawn_timer.stop()
 		return
 		
 	#print("timer timedout")
@@ -49,4 +61,14 @@ func _on_player_took_damage(_old_health: int, new_health: int) -> void:
 func _on_zombie_died() -> void:
 	zombies_dead += 1
 	if zombies_dead == max_zombies:
-		print("finished round")
+		current_round += 1
+		start_round()
+		
+func _on_big_center_label_timer_timeout() -> void:
+	big_center_label.visible = false
+
+func _on_player_died() -> void:
+	big_center_label.text = "You died!"
+	big_center_label.visible = true
+	enemy_spawn_timer.stop()
+	big_center_label_timer.start()

@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 signal took_damage(old_health, new_health)
-signal player_died(old_health, new_health)
+signal died()
 
 
 # constants
@@ -79,3 +79,4 @@ func take_damage(amount) -> void:
 		
 func die() -> void:
 	print("player died!")
+	died.emit()
