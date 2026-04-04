@@ -18,8 +18,14 @@ var mouse_sens := 0.5
 @onready var camera: Camera3D = $CameraPivotVertical/Camera
 @onready var projectile_spawn_point: Marker3D = $CameraPivotVertical/Camera/ProjectileSpawnPoint
 
+var is_dead := false
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+func _exit_tree() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -74,9 +80,10 @@ func take_damage(amount) -> void:
 	var old_health := health
 	health -= amount
 	took_damage.emit(old_health, health)
-	if health <= 0:
+	if !is_dead and health <= 0:
 		die()
 		
 func die() -> void:
 	print("player died!")
+	is_dead = true
 	died.emit()

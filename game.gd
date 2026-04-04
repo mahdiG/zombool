@@ -1,5 +1,9 @@
 extends Node3D
 
+signal game_over()
+
+const MAIN = preload("uid://ckxstxjr4a2p")
+
 @export var zombie_scene: PackedScene
 @export var max_zombies := 10
 
@@ -11,6 +15,7 @@ extends Node3D
 @onready var big_center_label: Label = $CenterContainer/BigCenterLabel
 @onready var big_center_label_timer: Timer = $BigCenterLabelTimer
 
+var is_game_over := false
 var zombies_spawned := 0
 var zombies_dead := 0
 var current_round := 1
@@ -65,8 +70,14 @@ func _on_zombie_died() -> void:
 		
 func _on_big_center_label_timer_timeout() -> void:
 	big_center_label.visible = false
+	print("isGameOVer:" , is_game_over)
+	if is_game_over:
+		print("shoudl change scene now!")
+		game_over.emit()
+		queue_free()
 
 func _on_player_died() -> void:
+	is_game_over = true
 	big_center_label.text = "You died!"
 	big_center_label.visible = true
 	enemy_spawn_timer.stop()

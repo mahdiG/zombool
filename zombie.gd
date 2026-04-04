@@ -40,13 +40,13 @@ func _on_navigation_agent_velocity_computed(safe_velocity: Vector3) -> void:
 	velocity = safe_velocity
 
 func _on_navigation_agent_target_reached() -> void:
-	print("reached target")
+	#print("reached target")
 	if !isAttackOnCooldown:
 		attack()
 
 func attack() -> void:
 	target_hero.take_damage(20)
-	print("zombie attacked")
+	#print("zombie attacked")
 	isAttackOnCooldown = true
 	attack_cooldown_timer.start()
 	
