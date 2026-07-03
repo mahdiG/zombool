@@ -82,7 +82,6 @@ mesh = SubResource("PlaneMesh_feb5d")
 
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1737574875]
 stream = ExtResource("4_fc0e3")
-volume_db = -80.0
 autoplay = true
 
 [node name="DebugStats" type="Control" parent="." unique_id=1785582666]
