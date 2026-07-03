@@ -7,12 +7,12 @@
 
 [node name="hand" unique_id=1226365768 instance=ExtResource("1_u4p2i")]
 
-[node name="Projectile" parent="." index="0" unique_id=1579800842 instance=ExtResource("2_wymn8")]
+[node name="Projectile" parent="rig" parent_id_path=PackedInt32Array(1427205485) index="0" unique_id=1579800842 instance=ExtResource("2_wymn8")]
 process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41342166, 1.4871743, 0.47040516)
 disable_mode = 1
 
-[node name="Skeleton3D" parent="rig" parent_id_path=PackedInt32Array(1427205485) index="0" unique_id=1746699240]
+[node name="Skeleton3D" parent="rig" parent_id_path=PackedInt32Array(1427205485) index="1" unique_id=1746699240]
 bones/1/position = Vector3(-0.3983447, 0.07617641, 1.2078464)
 bones/1/rotation = Quaternion(0.21321738, 0.010238103, 0.97212154, 0.09702192)
 bones/1/scale = Vector3(0.99548525, 0.99548537, 0.99548554)
@@ -78,5 +78,5 @@ bones/128/rotation = Quaternion(0.4064883, 9.570538e-09, 0.89336735, -0.19147345
 surface_material_override/0 = ExtResource("2_e75s6")
 surface_material_override/1 = ExtResource("3_wymn8")
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=546235675]
+[node name="AnimationPlayer" parent="." index="1" unique_id=546235675]
 autoplay = &"HandIdle"

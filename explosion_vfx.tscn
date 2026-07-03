@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://1tpx6focvgxw"]
+
+[ext_resource type="Script" uid="uid://v7igbgckb57a" path="res://explosion_vfx.gd" id="1_utebf"]
+[ext_resource type="Material" uid="uid://dapd3oywvr1br" path="res://materials/outline_material.tres" id="2_4d7ly"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4d7ly"]
+lifetime_randomness = 0.11
+radial_velocity_min = 4.9999776
+radial_velocity_max = 14.999977
+
+[sub_resource type="SphereMesh" id="SphereMesh_utebf"]
+material = ExtResource("2_4d7ly")
+radius = 0.125
+height = 0.25
+
+[node name="ExplosionVFX" type="Node3D" unique_id=1854174269]
+script = ExtResource("1_utebf")
+
+[node name="Particles" type="GPUParticles3D" parent="." unique_id=33758344]
+cast_shadow = 0
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_4d7ly")
+draw_pass_1 = SubResource("SphereMesh_utebf")
+
+[node name="Timer" type="Timer" parent="." unique_id=82466129]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[connection signal="finished" from="Particles" to="." method="_on_particles_finished"]

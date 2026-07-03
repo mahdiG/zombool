@@ -17,6 +17,7 @@ var mouse_sens := 0.5
 @onready var camera_pivot_vertical: Node3D = $CameraPivotVertical
 @onready var camera: Camera3D = $CameraPivotVertical/Camera
 @onready var projectile_spawn_point: Marker3D = $CameraPivotVertical/Camera/ProjectileSpawnPoint
+@onready var ray_cast: RayCast3D = $CameraPivotVertical/Camera/RayCast3D
 
 var is_dead := false
 
@@ -30,9 +31,6 @@ func _exit_tree() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		handle_mouse_movement(event)
-	if event.is_action_pressed("shoot"):
-		shoot()
-		
 		
 func handle_mouse_movement(event: InputEventMouseMotion):
 	# look up and down
@@ -42,8 +40,6 @@ func handle_mouse_movement(event: InputEventMouseMotion):
 	# look left and right
 	rotate_object_local(Vector3.UP, -event.screen_relative.x / 200 * mouse_sens)
 	
-
-
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
@@ -52,7 +48,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
+		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -66,16 +62,34 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
+	# Shoot should be after move_and_slide otherwise the projectile position changes when you move
+	if Input.is_action_just_pressed("shoot"):
+		shoot()
+	
 
 func shoot() -> void:
-	var bullet: RigidBody3D = projectile.instantiate()
+	# 1. Determine the global target point from the camera raycast
+	ray_cast.force_raycast_update()
+	var target_position: Vector3
 	
-	owner.add_child(bullet)
+	if ray_cast.is_colliding():
+		target_position = ray_cast.get_collision_point()
+	else:
+		target_position = ray_cast.to_global(ray_cast.target_position)
+
+	# 2. Instantiate the clean, single-node Area3D bullet
+	var bullet: Area3D = projectile.instantiate()
+	get_tree().current_scene.add_child(bullet)
+	
+	# 3. Position the bullet at the player's hand
 	bullet.global_position = projectile_spawn_point.global_position
-	bullet.rotation = camera.global_rotation
 	
-	var direction := camera_pivot_vertical.global_position.direction_to(projectile_spawn_point.global_position)
-	bullet.apply_central_impulse(direction * (30 + velocity.length()))
+	# 4. Calculate the straight-line direction to the target crosshair
+	var launch_direction: Vector3 = bullet.global_position.direction_to(target_position)
+	var total_launch_speed: float = 100.0 + velocity.length()
+	
+	# 5. Fire!
+	bullet.launch_projectile(launch_direction, total_launch_speed)
 	
 func take_damage(amount) -> void:
 	var old_health := health

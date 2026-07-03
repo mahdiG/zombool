@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b0astfvi35wnx"]
 
 [ext_resource type="Script" uid="uid://biq0yvd6d0bo6" path="res://projectile.gd" id="1_a85iw"]
+[ext_resource type="PackedScene" uid="uid://1tpx6focvgxw" path="res://explosion_vfx.tscn" id="2_dgwo2"]
 [ext_resource type="Shader" uid="uid://ojl7vfo1rs3b" path="res://shaders/projectile.gdshader" id="2_qxf0c"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dgwo2"]
@@ -14,7 +15,7 @@ noise = SubResource("FastNoiseLite_dgwo2")
 render_priority = 0
 shader = ExtResource("2_qxf0c")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_qxf0c")
-shader_parameter/displacement_strength = 0.038000001805
+shader_parameter/displacement_strength = 0.022000001045
 shader_parameter/animation_speed = 0.16400000779
 shader_parameter/flame_core_color = Color(0, 0, 0, 1)
 shader_parameter/flame_inner_color = Color(1, 1, 1, 1)
@@ -31,29 +32,13 @@ radial_segments = 32
 rings = 16
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a85iw"]
-radius = 0.15
+radius = 0.05
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qxf0c"]
-lifetime_randomness = 0.11
-radial_velocity_min = 4.9999776
-radial_velocity_max = 14.999977
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dgwo2"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(1, 0.98333335, 0, 1)
-emission_energy_multiplier = 2.29
-
-[sub_resource type="BoxMesh" id="BoxMesh_sxmqc"]
-material = SubResource("StandardMaterial3D_dgwo2")
-size = Vector3(0.1, 0.1, 0.1)
-
-[node name="Projectile" type="RigidBody3D" unique_id=1579800842]
+[node name="Projectile" type="Area3D" unique_id=1973667934]
 collision_layer = 4
 collision_mask = 2
-contact_monitor = true
-max_contacts_reported = 1
 script = ExtResource("1_a85iw")
+explosion_vfx_scene = ExtResource("2_dgwo2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1075383474]
 transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 0, 0, 0)
@@ -64,19 +49,4 @@ metadata/_edit_group_ = true
 transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 0, 0, 0)
 shape = SubResource("SphereShape3D_a85iw")
 
-[node name="ExplosionVFX" type="GPUParticles3D" parent="." unique_id=907070552]
-cast_shadow = 0
-emitting = false
-amount = 20
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_qxf0c")
-draw_pass_1 = SubResource("BoxMesh_sxmqc")
-
-[node name="Timer" type="Timer" parent="." unique_id=2091123625]
-wait_time = 10.0
-one_shot = true
-autostart = true
-
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
