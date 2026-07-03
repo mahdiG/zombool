@@ -12,6 +12,8 @@ radial_velocity_max = 14.999977
 material = ExtResource("2_4d7ly")
 radius = 0.125
 height = 0.25
+radial_segments = 16
+rings = 8
 
 [node name="ExplosionVFX" type="Node3D" unique_id=1854174269]
 script = ExtResource("1_utebf")
