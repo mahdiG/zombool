@@ -1,19 +1,37 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0astfvi35wnx"]
+[gd_scene format=3 uid="uid://b0astfvi35wnx"]
 
 [ext_resource type="Script" uid="uid://biq0yvd6d0bo6" path="res://projectile.gd" id="1_a85iw"]
+[ext_resource type="Shader" uid="uid://ojl7vfo1rs3b" path="res://shaders/projectile.gdshader" id="2_qxf0c"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a85iw"]
-albedo_color = Color(0.98333335, 1, 0, 1)
-emission_enabled = true
-emission = Color(1, 1, 0, 1)
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dgwo2"]
+noise_type = 0
+frequency = 0.0092
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_a85iw"]
-radius = 0.03
-height = 0.5
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qxf0c"]
+noise = SubResource("FastNoiseLite_dgwo2")
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qxf0c"]
-radius = 0.03
-height = 0.5
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ef8af"]
+render_priority = 0
+shader = ExtResource("2_qxf0c")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_qxf0c")
+shader_parameter/displacement_strength = 0.038000001805
+shader_parameter/animation_speed = 0.16400000779
+shader_parameter/flame_core_color = Color(0, 0, 0, 1)
+shader_parameter/flame_inner_color = Color(1, 1, 1, 1)
+shader_parameter/flame_outer_color = Color(1, 1, 1, 1)
+shader_parameter/glow_intensity = 1.0
+shader_parameter/inner_fire_threshold = 0.24400001159
+shader_parameter/outer_rim_threshold = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_tfblx"]
+material = SubResource("ShaderMaterial_ef8af")
+radius = 0.042
+height = 0.083
+radial_segments = 32
+rings = 16
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_a85iw"]
+radius = 0.15
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qxf0c"]
 lifetime_randomness = 0.11
@@ -30,23 +48,23 @@ emission_energy_multiplier = 2.29
 material = SubResource("StandardMaterial3D_dgwo2")
 size = Vector3(0.1, 0.1, 0.1)
 
-[node name="Projectile" type="RigidBody3D"]
+[node name="Projectile" type="RigidBody3D" unique_id=1579800842]
 collision_layer = 4
 collision_mask = 2
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_a85iw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1075383474]
 transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_a85iw")
-mesh = SubResource("CapsuleMesh_a85iw")
+mesh = SubResource("SphereMesh_tfblx")
+metadata/_edit_group_ = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1012277405]
 transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_qxf0c")
+shape = SubResource("SphereShape3D_a85iw")
 
-[node name="ExplosionVFX" type="GPUParticles3D" parent="."]
+[node name="ExplosionVFX" type="GPUParticles3D" parent="." unique_id=907070552]
 cast_shadow = 0
 emitting = false
 amount = 20
@@ -55,7 +73,7 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_qxf0c")
 draw_pass_1 = SubResource("BoxMesh_sxmqc")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=2091123625]
 wait_time = 10.0
 one_shot = true
 autostart = true

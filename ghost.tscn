@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dfnle1atl8ogw"]
+
+[ext_resource type="PackedScene" uid="uid://76w0hegs158y" path="res://meshes/ghost.glb" id="1_v5pp4"]
+[ext_resource type="Material" uid="uid://v55oiuidx2th" path="res://materials/dark_material.tres" id="2_6attn"]
+
+[node name="Ghost" unique_id=2146233550 instance=ExtResource("1_v5pp4")]
+transform = Transform3D(-1, 0, -8.940697e-08, 0, 1, 0, 8.940697e-08, 0, -1, 0, 0, 0)
+
+[node name="Ghost" parent="GhostArmature/Skeleton3D" parent_id_path=PackedInt32Array(1998690216) index="2" unique_id=1087251247]
+surface_material_override/0 = ExtResource("2_6attn")
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=796786889]
+autoplay = &"run"

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cd235ygqed5qe"]
+
+[ext_resource type="Script" uid="uid://cjkxdawohg70q" path="res://enemy.gd" id="1_uiaus"]
+[ext_resource type="PackedScene" uid="uid://dfnle1atl8ogw" path="res://ghost.tscn" id="2_roy8y"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_roy8y"]
+radius = 1.4316406
+height = 4.236328
+
+[node name="Enemy" type="CharacterBody3D" unique_id=155470483]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1_uiaus")
+
+[node name="Ghost" parent="." unique_id=2146233550 instance=ExtResource("2_roy8y")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1566435834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5097654, 0)
+shape = SubResource("CapsuleShape3D_roy8y")
+
+[node name="NavigationAgent" type="NavigationAgent3D" parent="." unique_id=1357509639]
+target_desired_distance = 3.0
+avoidance_enabled = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=1064143461]
+
+[connection signal="target_reached" from="NavigationAgent" to="." method="_on_navigation_agent_target_reached"]
+[connection signal="velocity_computed" from="NavigationAgent" to="." method="_on_navigation_agent_velocity_computed"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]

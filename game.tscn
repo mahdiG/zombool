@@ -1,23 +1,23 @@
-[gd_scene load_steps=14 format=3 uid="uid://gow0dapv2vfr"]
+[gd_scene format=3 uid="uid://gow0dapv2vfr"]
 
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
-[ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://zombie.tscn" id="2_feb5d"]
+[ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://enemy.tscn" id="2_feb5d"]
 [ext_resource type="PackedScene" uid="uid://blwv8o35ng6m3" path="res://player.tscn" id="3_7jktm"]
-[ext_resource type="Texture2D" uid="uid://11sve3gj0w8b" path="res://icon.svg" id="4_7jktm"]
+[ext_resource type="Texture2D" uid="uid://c810j5ose2v3g" path="res://sky.exr" id="3_ryrav"]
 [ext_resource type="AudioStream" uid="uid://b70vlo4hqaf1g" path="res://audio/dreadfulwhispers.mp3" id="4_fc0e3"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fc0e3"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_6hv1b"]
+panorama = ExtResource("3_ryrav")
 
 [sub_resource type="Sky" id="Sky_7jktm"]
-sky_material = SubResource("ProceduralSkyMaterial_fc0e3")
+sky_material = SubResource("PanoramaSkyMaterial_6hv1b")
 
 [sub_resource type="Environment" id="Environment_ryrav"]
 background_mode = 2
 sky = SubResource("Sky_7jktm")
-fog_mode = 1
-fog_light_color = Color(0.6553458, 0, 0.113010876, 1)
-fog_density = 1.0
-fog_sky_affect = 0.142
+glow_enabled = true
+glow_bloom = 0.24
+fog_density = 0.0946
 
 [sub_resource type="Curve3D" id="Curve3D_feb5d"]
 closed = true
@@ -28,69 +28,71 @@ _data = {
 point_count = 4
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_feb5d"]
-vertices = PackedVector3Array(-49.5, 1.5, -49.5, -49.5, 1.5, 49.5, 49.5, 1.5, 49.5, 49.5, 1.5, -49.5)
+vertices = PackedVector3Array(-499.5, 0.5, -499.5, -499.5, 0.5, 499.5, 499.5, 0.5, 499.5, 499.5, 0.5, -499.5)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_feb5d"]
 size = Vector3(100, 0, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryrav"]
-albedo_texture = ExtResource("4_7jktm")
-uv1_scale = Vector3(20, 20, 20)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7jktm"]
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_feb5d"]
-material = SubResource("StandardMaterial3D_ryrav")
-size = Vector2(100, 100)
+size = Vector2(1000, 1000)
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" unique_id=1412043975]
 script = ExtResource("1_e2o6t")
 zombie_scene = ExtResource("2_feb5d")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=702553143]
 environment = SubResource("Environment_ryrav")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=862230000]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.7071067, 0, -0.7071067, 0.70710677, 0, 12, 0)
+visible = false
+light_negative = true
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("3_7jktm")]
+[node name="Player" parent="." unique_id=387878978 instance=ExtResource("3_7jktm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
-[node name="SpawnPath" type="Path3D" parent="."]
+[node name="SpawnPath" type="Path3D" parent="." unique_id=362607145]
 curve = SubResource("Curve3D_feb5d")
 
-[node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath"]
+[node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath" unique_id=413049712]
 transform = Transform3D(-0.009852031, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.009852031, -44.7783, 0, -43.5089)
 
-[node name="EnemySpawnTimer" type="Timer" parent="."]
+[node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1857751535]
 wait_time = 1.421
 autostart = true
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=2017738249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 navigation_mesh = SubResource("NavigationMesh_feb5d")
 
-[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1487162669]
 
-[node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+[node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=419327085]
 shape = SubResource("BoxShape3D_feb5d")
 
-[node name="GroundMesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+[node name="GroundMesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1489253406]
+material_override = SubResource("StandardMaterial3D_7jktm")
 mesh = SubResource("PlaneMesh_feb5d")
 
-[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1737574875]
 stream = ExtResource("4_fc0e3")
 volume_db = -80.0
 autoplay = true
 
-[node name="DebugStats" type="Control" parent="."]
+[node name="DebugStats" type="Control" parent="." unique_id=1785582666]
 layout_mode = 3
 anchor_right = 1.0
 anchor_bottom = 0.05925926
 grow_horizontal = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="DebugContainer" type="HBoxContainer" parent="DebugStats"]
+[node name="DebugContainer" type="HBoxContainer" parent="DebugStats" unique_id=1491839011]
 custom_minimum_size = Vector2(1.4, 0)
 layout_mode = 1
 anchors_preset = 6
@@ -104,19 +106,19 @@ offset_bottom = 11.5
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="FpsLabel" type="Label" parent="DebugStats/DebugContainer"]
+[node name="FpsLabel" type="Label" parent="DebugStats/DebugContainer" unique_id=1701618411]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 1
 text = "FPS: 00"
 
-[node name="HealthLabel" type="Label" parent="DebugStats/DebugContainer"]
+[node name="HealthLabel" type="Label" parent="DebugStats/DebugContainer" unique_id=663880287]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 1
 text = "Health: 100"
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2141227629]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -124,12 +126,12 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(5.915, 0)
 
-[node name="BigCenterLabel" type="Label" parent="CenterContainer"]
+[node name="BigCenterLabel" type="Label" parent="CenterContainer" unique_id=1843919080]
 layout_mode = 2
 theme_override_font_sizes/font_size = 400
 text = "Round 1"
 
-[node name="BigCenterLabelTimer" type="Timer" parent="."]
+[node name="BigCenterLabelTimer" type="Timer" parent="." unique_id=511990418]
 wait_time = 2.0
 one_shot = true
 

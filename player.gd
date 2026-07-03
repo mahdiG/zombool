@@ -69,11 +69,12 @@ func _physics_process(delta: float) -> void:
 
 func shoot() -> void:
 	var bullet: RigidBody3D = projectile.instantiate()
+	
+	owner.add_child(bullet)
 	bullet.global_position = projectile_spawn_point.global_position
 	bullet.rotation = camera.global_rotation
 	
 	var direction := camera_pivot_vertical.global_position.direction_to(projectile_spawn_point.global_position)
-	owner.add_child(bullet)
 	bullet.apply_central_impulse(direction * (30 + velocity.length()))
 	
 func take_damage(amount) -> void:
