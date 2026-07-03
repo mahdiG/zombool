@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/sky.exr-5a9cc392a5a56bf0415dae29798d3376.bptc
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
