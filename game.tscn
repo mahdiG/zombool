@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b1p6wdnn4qppt" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://cd235ygqed5qe" path="res://enemy.tscn" id="2_feb5d"]
 [ext_resource type="PackedScene" uid="uid://blwv8o35ng6m3" path="res://player.tscn" id="3_7jktm"]
+[ext_resource type="PackedScene" uid="uid://x1nw7qkxpfns" path="res://map.tscn" id="3_eow3j"]
 [ext_resource type="Texture2D" uid="uid://c810j5ose2v3g" path="res://sky.exr" id="3_ryrav"]
 [ext_resource type="AudioStream" uid="uid://b70vlo4hqaf1g" path="res://audio/dreadfulwhispers.mp3" id="4_fc0e3"]
 
@@ -23,24 +24,10 @@ fog_density = 0.0946
 [sub_resource type="Curve3D" id="Curve3D_feb5d"]
 closed = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -44.7783, 0, -43.5089, 0, 0, 0, 0, 0, 0, 43.3616, 0, -42.6405, 0, 0, 0, 0, 0, 0, 43.0721, 0, 40.7233, 0, 0, 0, 0, 0, 0, -41.4495, 0, 39.1313),
-"tilts": PackedFloat32Array(0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -79.278305, 0.20000076, -97.508896, 0, 0, 0, 0, 0, 0, 1.5542297, -23.458626, -96.97461, 0, 0, 0, 0, 0, 0, 95.3616, -16, -96.6405, 0, 0, 0, 0, 0, 0, 103.77684, -9.197798, -9.860825, 0, 0, 0, 0, 0, 0, 80.0721, -1, 94.7233, 0, 0, 0, 0, 0, 0, -10.6117325, -18.622776, 88.96536, 0, 0, 0, 0, 0, 0, -74.9495, 19, 35.731308, 0, 0, 0, 0, 0, 0, -96.99402, 10.298035, -34.92814),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 4
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_feb5d"]
-vertices = PackedVector3Array(-499.5, 0.5, -499.5, -499.5, 0.5, 499.5, 499.5, 0.5, 499.5, 499.5, 0.5, -499.5)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_feb5d"]
-size = Vector3(100, 0, 100)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7jktm"]
-shading_mode = 0
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_feb5d"]
-size = Vector2(1000, 1000)
+point_count = 8
 
 [node name="Game" type="Node3D" unique_id=1412043975]
 script = ExtResource("1_e2o6t")
@@ -59,27 +46,17 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="SpawnPath" type="Path3D" parent="." unique_id=362607145]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 curve = SubResource("Curve3D_feb5d")
 
 [node name="SpawnLocation" type="PathFollow3D" parent="SpawnPath" unique_id=413049712]
-transform = Transform3D(-0.009852031, 0, -0.999949, 0, 1, 0, 0.999949, 0, -0.009852031, -44.7783, 0, -43.5089)
+transform = Transform3D(-0.006609629, 0.28088778, -0.9597062, 0, 0.9597288, 0.28089345, 0.99997133, 0.0018566173, -0.0063434835, -79.278305, 0.20000076, -97.508896)
+
+[node name="map" parent="." unique_id=230298392 instance=ExtResource("3_eow3j")]
 
 [node name="EnemySpawnTimer" type="Timer" parent="." unique_id=1857751535]
 wait_time = 1.421
 autostart = true
-
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=2017738249]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-navigation_mesh = SubResource("NavigationMesh_feb5d")
-
-[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1487162669]
-
-[node name="GroundCollision" type="CollisionShape3D" parent="NavigationRegion3D/Ground" unique_id=419327085]
-shape = SubResource("BoxShape3D_feb5d")
-
-[node name="GroundMesh" type="MeshInstance3D" parent="NavigationRegion3D/Ground" unique_id=1489253406]
-material_override = SubResource("StandardMaterial3D_7jktm")
-mesh = SubResource("PlaneMesh_feb5d")
 
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=1737574875]
 stream = ExtResource("4_fc0e3")
