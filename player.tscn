@@ -7,7 +7,8 @@
 [ext_resource type="Script" uid="uid://dh3474pnf2ddk" path="res://soul_suck.gd" id="5_sweqy"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_sweqy"]
-frequency = 0.0343
+frequency = 0.0021
+domain_warp_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hqtel"]
 noise = SubResource("FastNoiseLite_sweqy")
@@ -15,8 +16,8 @@ noise = SubResource("FastNoiseLite_sweqy")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i3pqv"]
 shader = ExtResource("4_hqtel")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_hqtel")
-shader_parameter/directional_intensities = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/distortion_radius = 0.6
+shader_parameter/directional_intensities = PackedFloat32Array(1.93, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/distortion_radius = 0.6000000285
 shader_parameter/animation_speed = 40.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_feb5d"]
@@ -28,7 +29,7 @@ projectile = ExtResource("2_i3pqv")
 [node name="SoulSuckOverlay" type="CanvasLayer" parent="." unique_id=39524796]
 layer = 10
 
-[node name="ColorRect" type="ColorRect" parent="SoulSuckOverlay" unique_id=163681966 node_paths=PackedStringArray("player_camera")]
+[node name="SoulSuckVFX" type="ColorRect" parent="SoulSuckOverlay" unique_id=163681966 node_paths=PackedStringArray("player_camera")]
 material = SubResource("ShaderMaterial_i3pqv")
 anchors_preset = 15
 anchor_right = 1.0
