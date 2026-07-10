@@ -57,31 +57,27 @@ func evaluate_all_enemy_distances() -> void:
 
 # Calculates the precise 45-degree pie slice mapping 3D target coordinates to the viewport
 func calculate_spatial_direction_sector(ghost_position: Vector3) -> GhostDirection:
-	if player_camera.is_position_behind(ghost_position):
-		return calculate_behind_camera_fallback_sector(ghost_position)
-		
-	var screen_pixel_position: Vector2 = player_camera.unproject_position(ghost_position)
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var screen_center := Vector2(viewport_size.x / 2.0, viewport_size.y / 2.0)
-	
-	var vector_from_center: Vector2 = screen_pixel_position - screen_center
-	var angle_radians: float = vector_from_center.angle()
-	
-	# Shift angle forward by half a segment (PI / 8) to center coordinate axes within sectors
-	var normalized_angle: float = fposmod(angle_radians + (PI / 8.0), TAU)
-	var sector_index: int = int(normalized_angle / (PI / 4.0))
-	
-	return (sector_index % 8) as GhostDirection
-
-# Safety math evaluating fallback edges if a ghost attacks from directly behind player viewport
-func calculate_behind_camera_fallback_sector(ghost_position: Vector3) -> GhostDirection:
 	var camera_transform: Transform3D = player_camera.global_transform
+	
+	# Transform the ghost's world position into the camera's local coordinate space
+	# In Godot's camera space: -Z is Forward, +Z is Backward, +X is Right, -X is Left
 	var local_direction: Vector3 = camera_transform.basis.inverse() * (ghost_position - camera_transform.origin)
 	
-	if local_direction.x < 0.0:
-		return GhostDirection.LEFT if local_direction.y > -0.5 else GhostDirection.BOTTOM_LEFT
-	else:
-		return GhostDirection.RIGHT if local_direction.y > -0.5 else GhostDirection.BOTTOM_RIGHT
+	# Calculate the horizontal angle on the XZ plane relative to the camera's view direction
+	var horizontal_angle: float = atan2(local_direction.x, -local_direction.z)
+	
+	# Shift angle forward by half a segment (PI / 8) to center coordinate axes within sectors
+	var normalized_angle: float = fposmod(horizontal_angle + (PI / 8.0), TAU)
+	var raw_sector_index: int = int(normalized_angle / (PI / 4.0))
+	
+	# Remap the raw 3D local slices to perfectly match your clockwise GhostDirection enum values:
+	# Index 0 (Front) -> maps to GhostDirection.TOP (6)
+	# Index 2 (Right) -> maps to GhostDirection.RIGHT (0)
+	# Index 4 (Back)  -> maps to GhostDirection.BOTTOM (2)
+	# Index 6 (Left)  -> maps to GhostDirection.LEFT (4)
+	var aligned_sector_index: int = (raw_sector_index + 6) % 8
+	
+	return aligned_sector_index as GhostDirection
 
 # Smoothly steps values toward target boundaries to ensure fluid visual transitions
 func interpolate_intensities(delta: float) -> void:
