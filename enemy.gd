@@ -57,7 +57,7 @@ func take_damage(amount: int) -> void:
 	health = health - amount
 	if health <= 0:
 		die()
-
+	
 func die() -> void:
 	print("zombie died")
 	died.emit()
