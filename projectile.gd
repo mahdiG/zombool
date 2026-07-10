@@ -22,9 +22,23 @@ func _physics_process(delta: float) -> void:
 	# 2. Update the projectile's position based on the calculated velocity
 	global_position += current_flight_velocity * delta
 	
-	# 3. Dynamically rotate the projectile to face the downward arc of its trajectory
-	if current_flight_velocity.normalized() != Vector3.ZERO:
-		look_at(global_position + current_flight_velocity.normalized(), Vector3.UP)
+	_rotate_towards_trajectory_direction()
+		
+		
+func _rotate_towards_trajectory_direction() -> void:
+	# 1. Safe guard against zero or near-zero velocity using Godot's built-in approximation
+	if current_flight_velocity.is_zero_approx():
+		return
+		
+	var target_position: Vector3 = global_position + current_flight_velocity
+	var movement_direction: Vector3 = current_flight_velocity.normalized()
+	
+	# 2. Safe guard against looking straight up or down, which causes a different look_at() failure
+	if abs(movement_direction.dot(Vector3.UP)) > 0.999:
+		# Use Vector3.FORWARD as a temporary up-vector if moving parallel to Vector3.UP
+		look_at(target_position, Vector3.FORWARD)
+	else:
+		look_at(target_position, Vector3.UP)
 
 func handle_projectile_impact(hit_target: Node3D) -> void:
 	# Apply damage if the target has a damage function
@@ -50,3 +64,7 @@ func spawn_impact_vfx() -> void:
 	
 func _on_body_entered(incoming_body: Node3D) -> void:
 	handle_projectile_impact(incoming_body)
+
+
+func _on_timer_timeout() -> void:
+	queue_free()
