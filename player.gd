@@ -18,7 +18,6 @@ var mouse_sens := 0.5
 @onready var camera: Camera3D = $CameraPivotVertical/Camera
 @onready var projectile_spawn_point: Marker3D = $CameraPivotVertical/Camera/ProjectileSpawnPoint
 @onready var ray_cast: RayCast3D = $CameraPivotVertical/Camera/RayCast3D
-@onready var soul_suck_overlay: ColorRect = $SoulSuckOverlay/ColorRect
 
 var is_dead := false
 
@@ -92,7 +91,7 @@ func shoot() -> void:
 	# 5. Fire!
 	bullet.launch_projectile(launch_direction, total_launch_speed)
 	
-func take_damage(amount: float) -> void:
+func take_damage(amount: int) -> void:
 	var old_health := health
 	health -= amount
 	took_damage.emit(old_health, health)
