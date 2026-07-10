@@ -16,9 +16,11 @@ noise = SubResource("FastNoiseLite_sweqy")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i3pqv"]
 shader = ExtResource("4_hqtel")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_hqtel")
-shader_parameter/directional_intensities = PackedFloat32Array(1.93, 0, 0, 0, 0, 0, 0, 0)
-shader_parameter/distortion_radius = 0.6000000285
+shader_parameter/directional_intensities = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/distortion_radius = 0.6
 shader_parameter/animation_speed = 40.0
+shader_parameter/wave_glow_color = Color(1, 1, 1, 1)
+shader_parameter/wave_coordinate_scale = 4.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_feb5d"]
 
