@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 signal died()
 
-@export var speed := 10
+@export var speed := 6
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
