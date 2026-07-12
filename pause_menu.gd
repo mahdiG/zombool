@@ -39,5 +39,5 @@ func _on_resume_button_pressed() -> void:
 	resume()
 
 func _on_exit_button_pressed() -> void:
-	resume()
+	get_tree().paused = false
 	exit.emit()
