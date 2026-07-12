@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 
 
 func _input(event):
-	print("pause menu input event: ", event)
+	#print("pause menu input event: ", event)
 	if event.is_action_pressed("option"):
 		if get_tree().paused == true:
 			resume()

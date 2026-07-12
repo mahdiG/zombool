@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://crh7iehowoqfx" path="res://hand.tscn" id="3_i3pqv"]
 [ext_resource type="Shader" uid="uid://bdr3f1rahnf4s" path="res://soul_suck_vfx.gdshader" id="4_hqtel"]
 [ext_resource type="Script" uid="uid://dh3474pnf2ddk" path="res://soul_suck.gd" id="5_sweqy"]
+[ext_resource type="Shader" uid="uid://hl0en50jkxs5" path="res://shaders/crosshair.gdshader" id="6_2hs0m"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_sweqy"]
 frequency = 0.0021
@@ -23,6 +24,11 @@ shader_parameter/wave_coordinate_scale = 4.0
 shader_parameter/wave_glow_color = Color(1, 1, 1, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_feb5d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laaf8"]
+shader = ExtResource("6_2hs0m")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/radius = 0.0800000038
 
 [node name="Player" type="CharacterBody3D" unique_id=1200017862]
 script = ExtResource("1_onrkg")
@@ -60,3 +66,18 @@ transform = Transform3D(-0.99742377, 0, 0.07173395, 0.00034930502, 0.99998814, 0
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivotVertical/Camera" unique_id=1400325516]
 target_position = Vector3(0, 0, -10)
+
+[node name="CenterContainer" type="CenterContainer" parent="CameraPivotVertical/Camera" unique_id=659497840]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="ColorRect" parent="CameraPivotVertical/Camera/CenterContainer" unique_id=1521129017]
+material = SubResource("ShaderMaterial_laaf8")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
