@@ -12,17 +12,22 @@ var mouse_sens := 0.5
 # exports (similar to lit properties)
 @export var projectile : PackedScene
 @export var health := 100
+@export_range(1, 25) var fire_rate := 4
 
 # onready
 @onready var camera_pivot_vertical: Node3D = $CameraPivotVertical
 @onready var camera: Camera3D = $CameraPivotVertical/Camera
 @onready var projectile_spawn_point: Marker3D = $CameraPivotVertical/Camera/ProjectileSpawnPoint
 @onready var ray_cast: RayCast3D = $CameraPivotVertical/Camera/RayCast3D
+@onready var shoot_timer: Timer = $ShootTimer
 
 var is_dead := false
+var is_weapon_on_cooldown := false
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	set_fire_rate()
 	
 func _exit_tree() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -63,11 +68,23 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	# Shoot should be after move_and_slide otherwise the projectile position changes when you move
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_pressed("shoot"):
 		shoot()
 	
+	
+func set_fire_rate():
+	if fire_rate == 0:
+		fire_rate = 1
+		
+	shoot_timer.wait_time = 1.0 / fire_rate
 
 func shoot() -> void:
+	if is_weapon_on_cooldown:
+		return
+		
+	is_weapon_on_cooldown = true
+	shoot_timer.start()
+		
 	# 1. Determine the global target point from the camera raycast
 	ray_cast.force_raycast_update()
 	var target_position: Vector3
@@ -106,3 +123,7 @@ func die() -> void:
 
 func _on_death_zone_area_body_entered(body: Node3D) -> void:
 	die()
+
+
+func _on_shoot_timer_timeout() -> void:
+	is_weapon_on_cooldown = false
