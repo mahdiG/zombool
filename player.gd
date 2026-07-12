@@ -102,3 +102,7 @@ func die() -> void:
 	print("player died!")
 	is_dead = true
 	died.emit()
+
+
+func _on_death_zone_area_body_entered(body: Node3D) -> void:
+	die()
