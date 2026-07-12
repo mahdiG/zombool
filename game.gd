@@ -49,6 +49,10 @@ func spawn_zombie() -> void:
 	
 	add_child(zombie)
 	
+
+func exit_game_and_go_to_main_menu():
+	game_over.emit()
+	queue_free()
 	
 
 func _on_enemy_spawn_timer_timeout() -> void:
@@ -68,17 +72,18 @@ func _on_zombie_died() -> void:
 		current_round += 1
 		start_round()
 		
-func _on_big_center_label_timer_timeout() -> void:
-	big_center_label.visible = false
-	print("isGameOVer:" , is_game_over)
-	if is_game_over:
-		print("shoudl change scene now!")
-		game_over.emit()
-		queue_free()
-
 func _on_player_died() -> void:
 	is_game_over = true
 	big_center_label.text = "You died!"
 	big_center_label.visible = true
 	enemy_spawn_timer.stop()
 	big_center_label_timer.start()
+	
+func _on_big_center_label_timer_timeout() -> void:
+	big_center_label.visible = false
+	print("isGameOVer:" , is_game_over)
+	if is_game_over:
+		exit_game_and_go_to_main_menu()
+
+func _on_pause_menu_exit() -> void:
+	exit_game_and_go_to_main_menu()

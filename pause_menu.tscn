@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://brutgp0mfao2"]
+
+[ext_resource type="Script" uid="uid://s6cbyf624cjw" path="res://pause_menu.gd" id="1_hdmo1"]
+
+[node name="PauseMenu" type="VBoxContainer" unique_id=962073936]
+process_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hdmo1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1475585058]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0, 0, 0, 0.16862746)
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect" unique_id=1606895325]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer" unique_id=391012643]
+layout_mode = 2
+
+[node name="GameTitleLabel" type="Label" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=2020109623]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 186
+text = "Paused"
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1078358079]
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="ColorRect/CenterContainer/VBoxContainer/ButtonsContainer" unique_id=2117238523]
+layout_mode = 2
+text = "Resume"
+
+[node name="ExitButton" type="Button" parent="ColorRect/CenterContainer/VBoxContainer/ButtonsContainer" unique_id=473882973]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/ButtonsContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/ButtonsContainer/ExitButton" to="." method="_on_exit_button_pressed"]
